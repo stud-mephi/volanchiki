@@ -2,10 +2,27 @@
 -- ТЕСТОВЫЕ ДАННЫЕ — Первенство МИФИ (Отборочный)
 -- ============================================
 
--- 1. Организатор МИФИ
+-- ============================================
+-- Первенство МИФИ — Отборочный этап
+-- ============================================
+
+-- Организатор (если ещё нет)
 INSERT INTO organizers (email, password_hash, name, full_name, contact_phone, city, is_verified, is_active)
-VALUES ('mephi@org.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Спортклуб МИФИ', 'Спортклуб МИФИ', '+74951234567', 'Москва', true, true)
-ON CONFLICT (email) DO NOTHING;
+SELECT 'mephi@org.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Спортклуб МИФИ', 'Спортклуб МИФИ', '+74951234567', 'Москва', true, true
+WHERE NOT EXISTS (SELECT 1 FROM organizers WHERE email = 'mephi@org.com');
+
+-- Турнир (используем ID организатора по email)
+INSERT INTO tournaments (title, organizer_id, status, start_date, end_date, city, venue, description)
+SELECT 'Первенство МИФИ — Отборочный этап', id, 'COMPLETED', '2026-05-10', '2026-05-15', 'Москва', 'Спорткомплекс МИФИ', 'Отборочный этап первенства МИФИ по бадминтону'
+FROM organizers WHERE email = 'mephi@org.com'
+ON CONFLICT (title) DO NOTHING;
+
+-- Категории
+INSERT INTO tournament_categories (tournament_id, category_id)
+SELECT t.id, 1 FROM tournaments t WHERE t.title = 'Первенство МИФИ — Отборочный этап'
+UNION ALL
+SELECT t.id, 2 FROM tournaments t WHERE t.title = 'Первенство МИФИ — Отборочный этап'
+ON CONFLICT DO NOTHING;
 
 -- 2. Игроки (только реальные, пароль у всех 123456)
 INSERT INTO users (full_name, nickname, password_hash, birth_date, gender, email, city) VALUES
