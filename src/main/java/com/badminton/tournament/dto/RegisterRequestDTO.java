@@ -32,4 +32,9 @@ public class RegisterRequestDTO {
 
     private String phone;
     private String city;
+    
+    // НОВОЕ ПОЛЕ
+    @NotBlank(message = "Роль обязательна")
+    @Pattern(regexp = "PLAYER|ORGANIZER", message = "Роль: PLAYER или ORGANIZER")
+    private String role;
 }
