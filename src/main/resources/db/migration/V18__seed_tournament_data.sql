@@ -3,8 +3,8 @@
 -- ============================================
 
 -- 1. Организатор МИФИ
-INSERT INTO organizers (email, password_hash, name, contact_phone, city, is_verified, is_active)
-VALUES ('mephi@org.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Спортклуб МИФИ', '+74951234567', 'Москва', true, true)
+INSERT INTO organizers (email, password_hash, name, full_name, contact_phone, city, is_verified, is_active)
+VALUES ('mephi@org.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Спортклуб МИФИ', 'Спортклуб МИФИ', '+74951234567', 'Москва', true, true)
 ON CONFLICT (email) DO NOTHING;
 
 -- 2. Игроки (только реальные, пароль у всех 123456)
