@@ -42,6 +42,13 @@ public class UserService {
         user.setCity(dto.getCity());
         user.setIsActive(true);
         user.setTournamentsPlayed(0);
+        
+        // НОВОЕ: устанавливаем роль из запроса
+        String role = dto.getRole();
+        if (role == null || role.isEmpty()) {
+            role = "PLAYER";  // по умолчанию игрок
+        }
+        user.setRole(role);
 
         user = userRepository.save(user);
 
@@ -52,7 +59,7 @@ public class UserService {
                 .token(token)
                 .fullName(user.getFullName())
                 .nickname(user.getNickname())
-                .role("PLAYER")
+                .role(user.getRole())  // возвращаем роль
                 .build();
     }
 
@@ -71,7 +78,7 @@ public class UserService {
                 .token(token)
                 .fullName(user.getFullName())
                 .nickname(user.getNickname())
-                .role("PLAYER")
+                .role(user.getRole())  // возвращаем роль
                 .build();
     }
 
@@ -100,3 +107,4 @@ public class UserService {
                 .build();
     }
 }
+
