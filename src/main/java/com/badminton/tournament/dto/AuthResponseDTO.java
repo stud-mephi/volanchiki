@@ -15,5 +15,6 @@ public class AuthResponseDTO {
     private String token;
     private String fullName;
     private String nickname;
-    private String role;  // PLAYER, ORGANIZER, ADMIN
+    private String role;  // PLAYER, ORGANIZER, ADMIN (уже есть)
 }
+
