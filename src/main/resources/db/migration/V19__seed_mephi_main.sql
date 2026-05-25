@@ -1,7 +1,9 @@
 -- ============================================
 -- Первенство МИФИ (основной этап)
 -- ============================================
-
+INSERT INTO organizers (email, password_hash, name, full_name, contact_phone, city, is_verified, is_active)
+VALUES ('mephi@org.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Спортклуб МИФИ', 'Спортклуб МИФИ', '+74951234567', 'Москва', true, true)
+ON CONFLICT (email) DO NOTHING;
 -- 1. Добавляем недостающих игроков
 INSERT INTO users (full_name, nickname, password_hash, birth_date, gender, email, city) VALUES
 ('Широков Денис', 'shirokov', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2000-01-01', 'MALE', 'shirokov@mephi.ru', 'Москва'),
