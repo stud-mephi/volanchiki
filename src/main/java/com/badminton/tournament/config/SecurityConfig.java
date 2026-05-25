@@ -33,10 +33,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // ========== СТАТИЧЕСКИЕ ФАЙЛЫ ==========
                         .requestMatchers("/", "/index.html", "/**.html", "/**.jpg", "/**.png", "/**.css", "/**.js").permitAll()
-                        // ========== ПУБЛИЧНЫЕ ЭНДПОИНТЫ ==========
-                        .requestMatchers("/auth/**", "/api/auth/**").permitAll()
-                        .requestMatchers("/tournaments/**", "/api/tournaments/**").permitAll()
-                        .requestMatchers("/ratings/**", "/api/ratings/**").permitAll()
+                        // ========== ПУБЛИЧНЫЕ ЭНДПОИНТЫ (ОБНОВЛЕНЫ С /api) ==========
+                        .requestMatchers("/api/auth/**").permitAll()  // ← ИЗМЕНЕНО
+                        .requestMatchers("/api/tournaments/**").permitAll()
+                        .requestMatchers("/api/ratings/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         // ВСЁ ОСТАЛЬНОЕ ТРЕБУЕТ ТОКЕН
                         .anyRequest().authenticated()
@@ -54,14 +54,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // РАЗРЕШАЕМ ЗАПРОСЫ С ЛОКАЛЬНОГО ФРОНТЕНДА
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:8082",
-                "null"  // для файлов открытых напрямую из папки
+                "null"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);  // ВАЖНО ДЛЯ АВТОРИЗАЦИИ!
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
