@@ -1,0 +1,30 @@
+stages:
+  - build
+
+variables:
+  POSTGRES_DB: volanchiki
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_HOST_AUTH_METHOD: trust
+  SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/volanchiki
+  SPRING_DATASOURCE_USERNAME: postgres
+  SPRING_DATASOURCE_PASSWORD: postgres
+  JWT_SECRET: volanchiki-super-secret-key-2024-very-long-string
+  JWT_EXPIRATION: "86400000"
+
+build:
+  stage: build
+  image: maven:3.9-eclipse-temurin-17
+  services:
+    - postgres:17
+  before_script:
+    - apt-get update && apt-get install -y postgresql-client
+    - until pg_isready -h postgres -p 5432; do sleep 1; done
+  script:
+    - mvn clean package -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 1 hour
+  only:
+    - develop
