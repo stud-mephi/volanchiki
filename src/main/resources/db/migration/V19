@@ -1,0 +1,108 @@
+-- ============================================
+-- ТЕСТОВЫЕ ДАННЫЕ — Первенство МИФИ (Основной)
+-- ============================================
+
+-- 1. Организатор МИФИ
+INSERT INTO organizers (email, password_hash, name, full_name, contact_phone, city, is_verified, is_active)
+SELECT 'mephi@org.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Спортклуб МИФИ', 'Спортклуб МИФИ', '+74951234567', 'Москва', true, true
+WHERE NOT EXISTS (SELECT 1 FROM organizers WHERE email = 'mephi@org.com');
+
+-- 2. Игроки основной сетки (пароль у всех 123456)
+INSERT INTO users (full_name, nickname, password_hash, birth_date, gender, email, city)
+SELECT 'Широков Денис', 'shirokov', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2000-01-01', 'MALE', 'shirokov@mephi.ru', 'Москва' WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'shirokov@mephi.ru');
+INSERT INTO users (full_name, nickname, password_hash, birth_date, gender, email, city)
+SELECT 'Закурдаев Никита', 'zakurdaev', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2001-01-01', 'MALE', 'zakurdaev@mephi.ru', 'Москва' WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'zakurdaev@mephi.ru');
+INSERT INTO users (full_name, nickname, password_hash, birth_date, gender, email, city)
+SELECT 'Тихонов Артем', 'tihonov', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2002-01-01', 'MALE', 'tihonov@mephi.ru', 'Москва' WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'tihonov@mephi.ru');
+INSERT INTO users (full_name, nickname, password_hash, birth_date, gender, email, city)
+SELECT 'Трофимов Владислав', 'trofimov', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2000-01-01', 'MALE', 'trofimov@mephi.ru', 'Москва' WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'trofimov@mephi.ru');
+INSERT INTO users (full_name, nickname, password_hash, birth_date, gender, email, city)
+SELECT 'Гагарин Юрий', 'gagarin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2001-01-01', 'MALE', 'gagarin@mephi.ru', 'Москва' WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'gagarin@mephi.ru');
+INSERT INTO users (full_name, nickname, password_hash, birth_date, gender, email, city)
+SELECT 'Новиков Олег', 'novikov', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2002-01-01', 'MALE', 'novikov@mephi.ru', 'Москва' WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'novikov@mephi.ru');
+INSERT INTO users (full_name, nickname, password_hash, birth_date, gender, email, city)
+SELECT 'Михайлова Мария', 'mihailova', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2000-01-01', 'FEMALE', 'mihailova@mephi.ru', 'Москва' WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'mihailova@mephi.ru');
+INSERT INTO users (full_name, nickname, password_hash, birth_date, gender, email, city)
+SELECT 'Лысоконь Валентина', 'lysokon', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2001-01-01', 'FEMALE', 'lysokon@mephi.ru', 'Москва' WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'lysokon@mephi.ru');
+INSERT INTO users (full_name, nickname, password_hash, birth_date, gender, email, city)
+SELECT 'Стефанова Вероника', 'stefanova', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2002-01-01', 'FEMALE', 'stefanova@mephi.ru', 'Москва' WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'stefanova@mephi.ru');
+INSERT INTO users (full_name, nickname, password_hash, birth_date, gender, email, city)
+SELECT 'Кочанова Анна', 'kochanova', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2000-01-01', 'FEMALE', 'kochanova@mephi.ru', 'Москва' WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'kochanova@mephi.ru');
+
+-- 3. Турнир
+INSERT INTO tournaments (title, organizer_id, status, start_date, end_date, city, venue, description)
+SELECT 'Первенство МИФИ', o.id, 'COMPLETED', '2026-05-20', '2026-05-25', 'Москва', 'Спорткомплекс МИФИ', 'Основной этап первенства МИФИ по бадминтону'
+FROM organizers o WHERE o.email = 'mephi@org.com'
+AND NOT EXISTS (SELECT 1 FROM tournaments WHERE title = 'Первенство МИФИ');
+
+-- 4. Категории
+INSERT INTO tournament_categories (tournament_id, category_id)
+SELECT t.id, 1 FROM tournaments t WHERE t.title = 'Первенство МИФИ'
+AND NOT EXISTS (SELECT 1 FROM tournament_categories tc WHERE tc.tournament_id = t.id AND tc.category_id = 1);
+INSERT INTO tournament_categories (tournament_id, category_id)
+SELECT t.id, 2 FROM tournaments t WHERE t.title = 'Первенство МИФИ'
+AND NOT EXISTS (SELECT 1 FROM tournament_categories tc WHERE tc.tournament_id = t.id AND tc.category_id = 2);
+
+-- 5. Регистрации — Мужчины
+INSERT INTO registrations (user_id, tournament_id, category_id, status)
+SELECT u.id, t.id, 1, 'CONFIRMED' FROM users u, tournaments t WHERE u.email = 'shirokov@mephi.ru' AND t.title = 'Первенство МИФИ' AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.user_id = u.id AND r.tournament_id = t.id AND r.category_id = 1);
+INSERT INTO registrations (user_id, tournament_id, category_id, status)
+SELECT u.id, t.id, 1, 'CONFIRMED' FROM users u, tournaments t WHERE u.email = 'zakurdaev@mephi.ru' AND t.title = 'Первенство МИФИ' AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.user_id = u.id AND r.tournament_id = t.id AND r.category_id = 1);
+INSERT INTO registrations (user_id, tournament_id, category_id, status)
+SELECT u.id, t.id, 1, 'CONFIRMED' FROM users u, tournaments t WHERE u.email = 'tihonov@mephi.ru' AND t.title = 'Первенство МИФИ' AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.user_id = u.id AND r.tournament_id = t.id AND r.category_id = 1);
+INSERT INTO registrations (user_id, tournament_id, category_id, status)
+SELECT u.id, t.id, 1, 'CONFIRMED' FROM users u, tournaments t WHERE u.email = 'tarachev@mephi.ru' AND t.title = 'Первенство МИФИ' AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.user_id = u.id AND r.tournament_id = t.id AND r.category_id = 1);
+INSERT INTO registrations (user_id, tournament_id, category_id, status)
+SELECT u.id, t.id, 1, 'CONFIRMED' FROM users u, tournaments t WHERE u.email = 'trofimov@mephi.ru' AND t.title = 'Первенство МИФИ' AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.user_id = u.id AND r.tournament_id = t.id AND r.category_id = 1);
+INSERT INTO registrations (user_id, tournament_id, category_id, status)
+SELECT u.id, t.id, 1, 'CONFIRMED' FROM users u, tournaments t WHERE u.email = 'gagarin@mephi.ru' AND t.title = 'Первенство МИФИ' AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.user_id = u.id AND r.tournament_id = t.id AND r.category_id = 1);
+INSERT INTO registrations (user_id, tournament_id, category_id, status)
+SELECT u.id, t.id, 1, 'CONFIRMED' FROM users u, tournaments t WHERE u.email = 'novikov@mephi.ru' AND t.title = 'Первенство МИФИ' AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.user_id = u.id AND r.tournament_id = t.id AND r.category_id = 1);
+INSERT INTO registrations (user_id, tournament_id, category_id, status)
+SELECT u.id, t.id, 1, 'CONFIRMED' FROM users u, tournaments t WHERE u.email = 'kost@mephi.ru' AND t.title = 'Первенство МИФИ' AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.user_id = u.id AND r.tournament_id = t.id AND r.category_id = 1);
+
+-- Регистрации — Женщины
+INSERT INTO registrations (user_id, tournament_id, category_id, status)
+SELECT u.id, t.id, 2, 'CONFIRMED' FROM users u, tournaments t WHERE u.email = 'mihailova@mephi.ru' AND t.title = 'Первенство МИФИ' AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.user_id = u.id AND r.tournament_id = t.id AND r.category_id = 2);
+INSERT INTO registrations (user_id, tournament_id, category_id, status)
+SELECT u.id, t.id, 2, 'CONFIRMED' FROM users u, tournaments t WHERE u.email = 'lysokon@mephi.ru' AND t.title = 'Первенство МИФИ' AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.user_id = u.id AND r.tournament_id = t.id AND r.category_id = 2);
+INSERT INTO registrations (user_id, tournament_id, category_id, status)
+SELECT u.id, t.id, 2, 'CONFIRMED' FROM users u, tournaments t WHERE u.email = 'mamedova@mephi.ru' AND t.title = 'Первенство МИФИ' AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.user_id = u.id AND r.tournament_id = t.id AND r.category_id = 2);
+INSERT INTO registrations (user_id, tournament_id, category_id, status)
+SELECT u.id, t.id, 2, 'CONFIRMED' FROM users u, tournaments t WHERE u.email = 'stefanova@mephi.ru' AND t.title = 'Первенство МИФИ' AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.user_id = u.id AND r.tournament_id = t.id AND r.category_id = 2);
+INSERT INTO registrations (user_id, tournament_id, category_id, status)
+SELECT u.id, t.id, 2, 'CONFIRMED' FROM users u, tournaments t WHERE u.email = 'kochanova@mephi.ru' AND t.title = 'Первенство МИФИ' AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.user_id = u.id AND r.tournament_id = t.id AND r.category_id = 2);
+INSERT INTO registrations (user_id, tournament_id, category_id, status)
+SELECT u.id, t.id, 2, 'CONFIRMED' FROM users u, tournaments t WHERE u.email = 'kluch@mephi.ru' AND t.title = 'Первенство МИФИ' AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.user_id = u.id AND r.tournament_id = t.id AND r.category_id = 2);
+
+-- 6. Сетка — Мужская
+INSERT INTO bracket_matches (tournament_id, category_id, round_name, round_number, match_order, player1_registration_id, player2_registration_id, winner_registration_id, score, status)
+SELECT t.id, 1, 'SEMIFINAL', 2, 1, r1.id, r2.id, r1.id, '21:18, 15:21, 21:16', 'COMPLETED'
+FROM tournaments t, registrations r1, registrations r2
+WHERE t.title = 'Первенство МИФИ' AND r1.user_id = (SELECT id FROM users WHERE email = 'shirokov@mephi.ru') AND r2.user_id = (SELECT id FROM users WHERE email = 'gagarin@mephi.ru') AND r1.tournament_id = t.id AND r2.tournament_id = t.id;
+
+INSERT INTO bracket_matches (tournament_id, category_id, round_name, round_number, match_order, player1_registration_id, player2_registration_id, winner_registration_id, score, status)
+SELECT t.id, 1, 'SEMIFINAL', 2, 2, r1.id, r2.id, r2.id, '16:21, 18:21', 'COMPLETED'
+FROM tournaments t, registrations r1, registrations r2
+WHERE t.title = 'Первенство МИФИ' AND r1.user_id = (SELECT id FROM users WHERE email = 'trofimov@mephi.ru') AND r2.user_id = (SELECT id FROM users WHERE email = 'tihonov@mephi.ru') AND r1.tournament_id = t.id AND r2.tournament_id = t.id;
+
+INSERT INTO bracket_matches (tournament_id, category_id, round_name, round_number, match_order, player1_registration_id, player2_registration_id, winner_registration_id, score, status)
+SELECT t.id, 1, 'FINAL', 1, 1, r1.id, r2.id, r1.id, '21:0, 21:0', 'COMPLETED'
+FROM tournaments t, registrations r1, registrations r2
+WHERE t.title = 'Первенство МИФИ' AND r1.user_id = (SELECT id FROM users WHERE email = 'shirokov@mephi.ru') AND r2.user_id = (SELECT id FROM users WHERE email = 'tihonov@mephi.ru') AND r1.tournament_id = t.id AND r2.tournament_id = t.id;
+
+-- Сетка — Женская
+INSERT INTO bracket_matches (tournament_id, category_id, round_name, round_number, match_order, player1_registration_id, player2_registration_id, winner_registration_id, score, status)
+SELECT t.id, 2, 'SEMIFINAL', 2, 1, r1.id, r2.id, r1.id, '22:20, 15:21, 21:16', 'COMPLETED'
+FROM tournaments t, registrations r1, registrations r2
+WHERE t.title = 'Первенство МИФИ' AND r1.user_id = (SELECT id FROM users WHERE email = 'mihailova@mephi.ru') AND r2.user_id = (SELECT id FROM users WHERE email = 'stefanova@mephi.ru') AND r1.tournament_id = t.id AND r2.tournament_id = t.id;
+
+INSERT INTO bracket_matches (tournament_id, category_id, round_name, round_number, match_order, player1_registration_id, player2_registration_id, winner_registration_id, score, status)
+SELECT t.id, 2, 'SEMIFINAL', 2, 2, r1.id, r2.id, r1.id, '21:19, 21:16', 'COMPLETED'
+FROM tournaments t, registrations r1, registrations r2
+WHERE t.title = 'Первенство МИФИ' AND r1.user_id = (SELECT id FROM users WHERE email = 'kochanova@mephi.ru') AND r2.user_id = (SELECT id FROM users WHERE email = 'lysokon@mephi.ru') AND r1.tournament_id = t.id AND r2.tournament_id = t.id;
+
+INSERT INTO bracket_matches (tournament_id, category_id, round_name, round_number, match_order, player1_registration_id, player2_registration_id, winner_registration_id, score, status)
+SELECT t.id, 2, 'FINAL', 1, 1, r1.id, r2.id, r1.id, '21:12, 23:21', 'COMPLETED'
+FROM tournaments t, registrations r1, registrations r2
+WHERE t.title = 'Первенство МИФИ' AND r1.user_id = (SELECT id FROM users WHERE email = 'mihailova@mephi.ru') AND r2.user_id = (SELECT id FROM users WHERE email = 'kochanova@mephi.ru') AND r1.tournament_id = t.id AND r2.tournament_id = t.id;
