@@ -55,13 +55,15 @@ public class User {
     @Column(name = "last_active_date")
     private LocalDate lastActiveDate;
 
-    // ===== ДОБАВЛЕННЫЕ ПОЛЯ =====
+    // НОВОЕ ПОЛЕ - РОЛЬ
+    @Column(nullable = false, length = 20)
+    private String role = "PLAYER";  // PLAYER или ORGANIZER
+
     @Column(name = "verification_token")
     private String verificationToken;
 
     @Column(name = "reset_token")
     private String resetToken;
-    // ============================
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -73,6 +75,9 @@ public class User {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+        if (role == null) {
+            role = "PLAYER";
+        }
     }
 
     @PreUpdate
@@ -87,5 +92,14 @@ public class User {
 
     public boolean isNewbie() {
         return tournamentsPlayed != null && tournamentsPlayed <= 5;
+    }
+    
+    // Проверка роли
+    public boolean isOrganizer() {
+        return "ORGANIZER".equals(role);
+    }
+    
+    public boolean isPlayer() {
+        return "PLAYER".equals(role);
     }
 }
