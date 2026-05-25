@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS categories (
+    id SERIAL PRIMARY KEY,
+    code VARCHAR(10) UNIQUE NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    type VARCHAR(20) NOT NULL CHECK (type IN ('SINGLES', 'DOUBLES', 'MIXED')),
+    gender VARCHAR(10) CHECK (gender IN ('MALE', 'FEMALE', 'MIXED'))
+);
