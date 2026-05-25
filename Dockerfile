@@ -1,9 +1,7 @@
 # Шаг 1: Собираем приложение
 FROM maven:3.9.8-eclipse-temurin-17 AS build
 WORKDIR /app
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
-COPY src ./src
+COPY . .
 RUN mvn clean package -DskipTests
 
 # Шаг 2: Создаём лёгкий образ для запуска
